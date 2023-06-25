@@ -1,0 +1,46 @@
+<div>
+  <div *ngIf="showStartScreen">
+    <div ngClass="quiz-title">
+      Trivia App
+    </div>
+    <div>
+      <div ngClass="quiz-category-title">
+        Pick a Category
+      </div>
+      <div ngClass="quiz-category-dropdown-wrapper">
+        <mat-form-field>
+          <mat-select ngClass="quiz-category-dropdown" panelClass="category-dropDown-panel" placeholder="Category"
+                      [(value)]="selectedCategoryValue">
+            <mat-option *ngFor="let category of categories" [value]="category.value">
+              {{category.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="quiz-start">
+        <button mat-flat-button color="primary" [disabled]="!selectedCategoryValue" (click)="start()">Start</button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="showQuizScreen">
+    <div *ngFor="let question of (questions$ | async); let i = index">
+      <div>
+        Question {{ i + 1 }}
+      </div>
+      <div>
+        {{question.difficulty}}
+      </div>
+      <div>
+        <div>
+          {{question.question}}
+        </div>
+        <div *ngFor="let answer of question.allAnswers">
+          <button>
+            {{answer}}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
