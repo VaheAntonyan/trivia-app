@@ -10,7 +10,7 @@ export interface BackendQuestion {
 export interface FrontendQuestion {
   category: string,
   type: 'boolean' | 'multiple',
-  difficulty: 'easy' | 'medium' | 'hard',
+  difficulty: Capitalize<'easy' | 'medium' | 'hard'>,
   question: string,
   correctAnswer: string,
   incorrectAnswers: string[],

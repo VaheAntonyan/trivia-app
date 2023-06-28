@@ -1,46 +1,81 @@
 <div>
-  <div *ngIf="showStartScreen">
-    <div ngClass="quiz-title">
-      Trivia App
-    </div>
-    <div>
-      <div ngClass="quiz-category-title">
+  <div *ngIf="(screenName$ | async) === 'home'">
+    <div [ngClass]="'quiz-container'">
+      <div [ngClass]="'home-title'">
+        Trivia App
+      </div>
+      <div [ngClass]="'quiz-category-title'">
         Pick a Category
       </div>
-      <div ngClass="quiz-category-dropdown-wrapper">
-        <mat-form-field>
-          <mat-select ngClass="quiz-category-dropdown" panelClass="category-dropDown-panel" placeholder="Category"
+      <div [ngClass]="'quiz-category-dropdown-wrapper'">
+        <mat-form-field appearance="outline">
+          <mat-select placeholder="Category"
                       [(value)]="selectedCategoryValue">
-            <mat-option *ngFor="let category of categories" [value]="category.value">
+            <mat-option *ngFor="let category of categories" [value]="category.value" >
               {{category.name}}
             </mat-option>
           </mat-select>
         </mat-form-field>
       </div>
-      <div class="quiz-start">
-        <button mat-flat-button color="primary" [disabled]="!selectedCategoryValue" (click)="start()">Start</button>
+      <button [ngClass]="selectedCategoryValue
+      ? 'button margin-top-99 quiz-start animate-300-ease-in-out'
+      : 'button margin-top-99 quiz-start-selected animate-300-ease-in-out'" [disabled]="!selectedCategoryValue"
+              (click)="start()">
+        <span>Start</span>
+      </button>
+      <button [ngClass]="'button-score-board transition-300-ease-in-out'" (click)="showScoreBoard()">Score Board
+      </button>
+    </div>
+  </div>
+  <div *ngIf="(screenName$ | async) === 'quiz'">
+    <div *ngIf="(currentQuestion$ | async); let currentQuestion" [ngClass]="'question-container'">
+      <div [ngClass]="'question-number'">
+        Questions {{ currentQuestionIndex$ | async | number : '2.0-0'}}
+      </div>
+      <div [ngClass]="'difficulty'" [ngStyle]="{'background': difficultyBackgroundColor[currentQuestion.difficulty]}">
+        <span [ngClass]="'difficulty-text'">
+          {{currentQuestion.difficulty}}
+        </span>
+      </div>
+      <div [ngClass]="'question-answer-wrapper'">
+        <div [ngClass]="'question'">
+          {{currentQuestion.question}}
+        </div>
+        <div [ngClass]="'answers'">
+          <div *ngFor="let answer of currentQuestion.allAnswers">
+            <button (click)="handleAnswer(answer)" [ngClass]="'answer-button transition-300-ease-in-out'">
+              <span>
+                {{answer}}
+              </span>
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-  <div *ngIf="showQuizScreen">
-    <div *ngFor="let question of (questions$ | async); let i = index">
+  <div *ngIf="(screenName$ | async) === 'thank-you'" [ngClass]="'thank-you-container'">
+    <div [ngClass]="'thank-you'">
+      Thank You
+    </div>
+    <div [ngClass]="'score'">
+      Your Score: {{(correctAnswerCount$ | async)}} / {{questionCount}}
+    </div>
+    <button (click)="restart()" [ngClass]="'button button-restart transition-300-ease-in-out'">
+      <span>Back to home</span>
+    </button>
+  </div>
+  <div *ngIf="(screenName$ | async) === 'score-board'">
+    <div *ngFor="let quizScoreRecord of quizScoreRecords">
       <div>
-        Question {{ i + 1 }}
+        {{quizScoreRecord.score}}
       </div>
       <div>
-        {{question.difficulty}}
-      </div>
-      <div>
-        <div>
-          {{question.question}}
-        </div>
-        <div *ngFor="let answer of question.allAnswers">
-          <button>
-            {{answer}}
-          </button>
-        </div>
+        {{quizScoreRecord.answers.toString()}}
       </div>
     </div>
+    <button (click)="restart()" [ngClass]="'button button-restart transition-300-ease-in-out'">
+      <span>Back to home</span>
+    </button>
   </div>
 
 </div>

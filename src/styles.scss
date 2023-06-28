@@ -1,18 +1,44 @@
+div {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
 body {
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Barlow, serif;
   margin: 0;
-  padding: 30px;
+
+  background: #EFF2F7;
 }
 
-html, body {
-  height: 100%;
+.mat-mdc-option:hover:not(.mdc-list-item--disabled),
+.mat-mdc-option.mat-mdc-option-active.mdc-list-item,
+.mat-mdc-option.mdc-list-item--selected:not(.mat-mdc-option-multiple):not(.mdc-list-item--disabled) {
+  background: #E7EBF1;
+  color: #3A7859;
+  border-radius: 16px;
 }
 
-.category-dropdown-panel {
+.mat-mdc-option {
+  padding: 6px 18px 8px 18px !important;
+  margin-bottom: 4px !important;
+}
+
+.mat-mdc-select-panel {
   border-radius: 18px !important;
-  background: #f6f7f8 !important;
-
-  /* Card */
-  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.04) !important;
+  padding: 10px !important;
+  margin: 6px 0;
 }
 
+.mdc-list-item__primary-text {
+  color: unset;
+}
+
+.mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+  padding-top: 12.5px;
+  padding-bottom: 12.5px;
+}

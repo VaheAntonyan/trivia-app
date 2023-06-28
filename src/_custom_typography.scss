@@ -1,0 +1,24 @@
+@use '@angular/material' as mat;
+
+$heading-font-family: "Barlow, sans-serif";
+
+$barlow-typography: mat.define-typography-config(
+  $font-family: $heading-font-family,
+  $headline-1: null,
+  $headline-2: null,
+  $headline-3: null,
+  $headline-4: null,
+  $headline-5: null,
+  $headline-6: null,
+  $subtitle-1: null,
+  $subtitle-2: null,
+  $body-1: mat.define-typography-level(
+    $font-weight: 500,
+    $font-size: 18px,
+    $line-height: 170%,
+  ),
+  $body-2: null,
+  $caption: null,
+  $button: null,
+  $overline: null,
+);
