@@ -1,0 +1,27 @@
+<div [ngClass]="'quiz-container'">
+  <div [ngClass]="'home-title'">
+    Trivia App
+  </div>
+  <div [ngClass]="'quiz-category-title'">
+    Pick a Category
+  </div>
+  <div [ngClass]="'quiz-category-dropdown-wrapper'">
+    <mat-form-field appearance="outline">
+      <mat-select placeholder="Category"
+                  [(value)]="selectedCategoryValue">
+        <mat-option *ngFor="let category of (categories$ | async)" [value]="category.id">
+          {{category.name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <button [ngClass]="selectedCategoryValue
+      ? 'button margin-top-99 quiz-start animate-300-ease-in-out'
+      : 'button margin-top-99 quiz-start-selected animate-300-ease-in-out'" [disabled]="!selectedCategoryValue"
+          (click)="start()">
+    <span>Start</span>
+  </button>
+  <button [ngClass]="'button-score-board transition-300-ease-in-out'" (click)="showScoreBoard()">
+    <span>Score Board</span>
+  </button>
+</div>

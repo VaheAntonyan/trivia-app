@@ -1,0 +1,11 @@
+<div [ngClass]="'thank-you-container'">
+  <div [ngClass]="'thank-you'">
+    Thank You
+  </div>
+  <div [ngClass]="'score'">
+    Your Score: {{(correctAnswerCount$ | async)}} / {{questionCount}}
+  </div>
+  <button (click)="restart()" [ngClass]="'button button-restart transition-300-ease-in-out'">
+    <span>Back to home</span>
+  </button>
+</div>

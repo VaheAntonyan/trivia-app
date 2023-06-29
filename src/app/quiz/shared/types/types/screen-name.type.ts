@@ -1,1 +1,1 @@
-export type ScreenName = 'home' | 'quiz' | 'thank-you' | 'score-board';
+export type ScreenName = 'home' | 'game' | 'thank-you' | 'score-board';

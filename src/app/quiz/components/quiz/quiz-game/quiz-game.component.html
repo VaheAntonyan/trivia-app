@@ -1,0 +1,24 @@
+<div *ngIf="(currentQuestion$ | async); let currentQuestion" [ngClass]="'question-container'">
+  <div [ngClass]="'question-number'">
+    Questions {{ currentQuestionIndex$ | async | number : '2.0-0'}}
+  </div>
+  <div [ngClass]="'difficulty'" [ngStyle]="{'background': difficultyBackgroundColor[currentQuestion.difficulty]}">
+        <span [ngClass]="'difficulty-text'">
+          {{currentQuestion.difficulty}}
+        </span>
+  </div>
+  <div [ngClass]="'question-answer-wrapper'">
+    <div [ngClass]="'question'">
+      {{currentQuestion.question}}
+    </div>
+    <div [ngClass]="'answers'">
+      <div *ngFor="let answer of currentQuestion.allAnswers">
+        <button (click)="handleAnswer(answer)" [ngClass]="'answer-button transition-300-ease-in-out'">
+              <span>
+                {{answer}}
+              </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

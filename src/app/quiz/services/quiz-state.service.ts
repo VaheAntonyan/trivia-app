@@ -4,12 +4,10 @@ import {StateService} from "../shared/services/state.service";
 import {QuizState} from "../shared/types/interfaces/quiz-state.interface";
 import {Question} from "../shared/types/interfaces/question.interface";
 import {ScreenName} from "../shared/types/types/screen-name.type";
-import {Category} from "../shared/types/interfaces/category.interface";
 import {ScoreRecord} from "../shared/types/interfaces/score-record.interface";
 
 const initialState: QuizState = {
   questions: [],
-  categories: [],
   currentQuestionIndex: 0,
   correctAnswerCount: 0,
   answers: [],
@@ -22,7 +20,6 @@ const initialState: QuizState = {
 export class QuizStateService extends StateService<QuizState> {
 
   currentQuestion$: Observable<Question> = this.select(state => state.questions[state.currentQuestionIndex]);
-  categories$ = this.select(state => state.categories);
   currentQuestionIndex$ = this.select(state => state.currentQuestionIndex + 1);
   correctAnswerCount$ = this.select(state => state.correctAnswerCount);
   screenName$ = this.select(state => state.screenName);
@@ -34,12 +31,6 @@ export class QuizStateService extends StateService<QuizState> {
   showScreen(name: ScreenName) {
     this.setState({
       screenName: name
-    })
-  }
-
-  setCategories(categories: Category[]) {
-    this.setState({
-      categories: categories
     })
   }
 

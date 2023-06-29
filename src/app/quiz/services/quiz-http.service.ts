@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {map} from "rxjs";
+import {map, Observable, shareReplay} from "rxjs";
 import {QuestionDto} from "../shared/types/dtos/question.dto";
 import {Question} from "../shared/types/interfaces/question.interface";
 import {Category} from "../shared/types/interfaces/category.interface";
@@ -14,20 +14,22 @@ export class QuizHttpService {
   private apiCategoryByIdUrl: string = 'https://opentdb.com/api.php?amount=10&encode=url3986&category='
   private apiCategoriesUrl: string = 'https://opentdb.com/api_category.php'
 
+  categories$!: Observable<Category[]>;
+
   constructor(private httpClient: HttpClient,
               private quizStateService: QuizStateService) {
   }
 
-  loadCategories(): void {
-    this.httpClient.get<{ trivia_categories: Category[] }>(this.apiCategoriesUrl)
-      .pipe(
-        map(response => {
-          return response.trivia_categories.sort((a, b) => a.name.localeCompare(b.name))
-        })
-      )
-      .subscribe(categories => {
-        this.quizStateService.setCategories(categories);
-      })
+  loadCategories(): Observable<Category[]> {
+    return this.categories$
+      ? this.categories$
+      : this.categories$ = this.httpClient.get<{ trivia_categories: Category[] }>(this.apiCategoriesUrl)
+        .pipe(
+          map(response => {
+            return response.trivia_categories.sort((a, b) => a.name.localeCompare(b.name))
+          }),
+          shareReplay({refCount: true, bufferSize: 1})
+        )
   }
 
   loadQuestions(categoryId: number): void {

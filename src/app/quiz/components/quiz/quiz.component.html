@@ -1,79 +1,14 @@
 <div>
   <div *ngIf="(screenName$ | async) === 'home'" @enterAnimation @leaveAnimation>
-    <div [ngClass]="'quiz-container'">
-      <div [ngClass]="'home-title'">
-        Trivia App
-      </div>
-      <div [ngClass]="'quiz-category-title'">
-        Pick a Category
-      </div>
-      <div [ngClass]="'quiz-category-dropdown-wrapper'">
-          <mat-form-field appearance="outline">
-            <mat-select placeholder="Category"
-                        [(value)]="selectedCategoryValue">
-              <mat-option *ngFor="let category of (categories$ | async)" [value]="category.id">
-                {{category.name}}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-      </div>
-      <button [ngClass]="selectedCategoryValue
-      ? 'button margin-top-99 quiz-start animate-300-ease-in-out'
-      : 'button margin-top-99 quiz-start-selected animate-300-ease-in-out'" [disabled]="!selectedCategoryValue"
-              (click)="start()">
-        <span>Start</span>
-      </button>
-      <button [ngClass]="'button-score-board transition-300-ease-in-out'" (click)="showScoreBoard()">
-        <span>Score Board</span>
-      </button>
-    </div>
+    <app-quiz-home></app-quiz-home>
   </div>
-  <div *ngIf="(screenName$ | async) === 'quiz'" @enterAnimation @leaveAnimation>
-    <div *ngIf="(currentQuestion$ | async); let currentQuestion" [ngClass]="'question-container'">
-      <div [ngClass]="'question-number'">
-        Questions {{ currentQuestionIndex$ | async | number : '2.0-0'}}
-      </div>
-      <div [ngClass]="'difficulty'" [ngStyle]="{'background': difficultyBackgroundColor[currentQuestion.difficulty]}">
-        <span [ngClass]="'difficulty-text'">
-          {{currentQuestion.difficulty}}
-        </span>
-      </div>
-      <div [ngClass]="'question-answer-wrapper'">
-        <div [ngClass]="'question'">
-          {{currentQuestion.question}}
-        </div>
-        <div [ngClass]="'answers'">
-          <div *ngFor="let answer of currentQuestion.allAnswers">
-            <div [ngClass]="'answer-grid-item'">
-              <button (click)="handleAnswer(answer)" [ngClass]="'answer-button transition-300-ease-in-out'">
-                <span>
-                  {{answer}}
-                </span>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div *ngIf="(screenName$ | async) === 'game'" @enterAnimation @leaveAnimation>
+    <app-quiz-game></app-quiz-game>
   </div>
-  <div *ngIf="(screenName$ | async) === 'thank-you'" [ngClass]="'thank-you-container'" @enterAnimation @leaveAnimation>
-    <div [ngClass]="'thank-you'">
-      Thank You
-    </div>
-    <div [ngClass]="'score'">
-      Your Score: {{(correctAnswerCount$ | async)}} / {{questionCount}}
-    </div>
-    <button (click)="restart()" [ngClass]="'button button-restart transition-300-ease-in-out'">
-      <span>Back to home</span>
-    </button>
+  <div *ngIf="(screenName$ | async) === 'thank-you'" @enterAnimation @leaveAnimation>
+    <app-quiz-thank-you></app-quiz-thank-you>
   </div>
   <div *ngIf="(screenName$ | async) === 'score-board'" @enterAnimation>
-    <app-score-board-table></app-score-board-table>
-    <div [ngClass]="'quiz-container'">
-      <button (click)="restart()" [ngClass]="'button transition-300-ease-in-out'">
-        <span>Back to home</span>
-      </button>
-    </div>
+    <app-score-board></app-score-board>
   </div>
-
 </div>
