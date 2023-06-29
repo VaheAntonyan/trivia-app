@@ -1,7 +1,6 @@
-import {Component, Input} from '@angular/core';
+import {Component} from '@angular/core';
 import {Observable} from "rxjs";
 import {Question} from "../../../shared/types/interfaces/question.interface";
-import {QuizHttpService} from "../../../services/quiz-http.service";
 import {QuizStateService} from "../../../services/quiz-state.service";
 
 @Component({
