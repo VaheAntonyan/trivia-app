@@ -1,11 +1,12 @@
 import {Component, OnInit} from '@angular/core';
-import {QuizService} from "../../services/quiz.service";
-import {map, Observable} from "rxjs";
+import {QuizHttpService} from "../../services/quiz-http.service";
+import {Observable} from "rxjs";
 import {Question} from "../../shared/types/interfaces/question.interface";
 import {ScreenName} from "../../shared/types/types/screen-name.type";
 import {Category} from "../../shared/types/interfaces/category.interface";
 import {enterAnimation} from "../../shared/animations/enter.animation";
 import {leaveAnimation} from "../../shared/animations/leave.animation";
+import {QuizStateService} from "../../services/quiz-state.service";
 
 @Component({
   selector: 'app-quiz',
@@ -23,42 +24,27 @@ export class QuizComponent implements OnInit {
     'Medium': "#EAC505",
     'Hard': "#EF7D54",
   }
-
   questionCount: number = 10;
-
   selectedCategoryValue: number | null = null;
+
   currentQuestion$!: Observable<Question>;
-  correctAnswerCount$!: Observable<number>;
-  currentQuestionIndex$!: Observable<number>;
-  screenName$!: Observable<ScreenName>;
   categories$!: Observable<Category[]>;
+  currentQuestionIndex$!: Observable<number>;
+  correctAnswerCount$!: Observable<number>;
+  screenName$!: Observable<ScreenName>;
 
   ngOnInit() {
-    this.currentQuestionIndex$ = this.quizService.state$
-      .pipe(
-        map(state => state.currentQuestionIndex + 1)
-      )
-    this.screenName$ = this.quizService.state$
-      .pipe(
-        map(state => state.screenName)
-      )
-    this.correctAnswerCount$ = this.quizService.state$
-      .pipe(
-        map(state => state.correctAnswerCount)
-      )
-    this.currentQuestion$ = this.quizService.state$
-      .pipe(
-        map(state => state.questions[state.currentQuestionIndex])
-      )
-    this.categories$ = this.quizService.state$
-      .pipe(
-        map(state => state.categories)
-      )
+    this.currentQuestion$ = this.quizStateService.currentQuestion$;
+    this.categories$ = this.quizStateService.categories$;
+    this.currentQuestionIndex$ = this.quizStateService.currentQuestionIndex$;
+    this.correctAnswerCount$ = this.quizStateService.correctAnswerCount$;
+    this.screenName$ = this.quizStateService.screenName$;
 
     this.quizService.loadCategories();
   }
 
-  constructor(private quizService: QuizService) {
+  constructor(private quizService: QuizHttpService,
+              private quizStateService: QuizStateService) {
   }
 
   start() {
@@ -69,24 +55,20 @@ export class QuizComponent implements OnInit {
   }
 
   handleAnswer(answer: string) {
-    this.quizService.checkAnswer(answer);
+    this.quizStateService.checkAnswer(answer);
 
-    this.nextQuestion();
-  }
-
-  nextQuestion() {
-    this.quizService.nextQuestion();
+    this.quizStateService.nextQuestion();
   }
 
   restart() {
-    this.quizService.restart();
+    this.quizStateService.restart();
   }
 
   showQuizScreen() {
-    this.quizService.showScreen('quiz');
+    this.quizStateService.showScreen('quiz');
   }
 
   showScoreBoard() {
-    this.quizService.showScreen('score-board');
+    this.quizStateService.showScreen('score-board');
   }
 }
