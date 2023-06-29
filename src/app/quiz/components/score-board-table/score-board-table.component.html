@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="mat-elevation-z4">
+
+    <mat-table matSort [dataSource]="dataSource">
+
+      <ng-container matColumnDef="score">
+        <mat-header-cell *matHeaderCellDef>Score</mat-header-cell>
+        <mat-cell *matCellDef="let player">{{ player.score }}</mat-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="answers">
+        <mat-header-cell *matHeaderCellDef>Answers</mat-header-cell>
+        <mat-cell *matCellDef="let player">
+          <ul>
+            <li *ngFor="let answer of player.answers">{{ answer }}</li>
+          </ul>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="['score', 'answers']"></mat-header-row>
+
+      <mat-row *matRowDef="let row; columns: ['score', 'answers']"></mat-row>
+
+    </mat-table>
+
+    <mat-paginator [pageSizeOptions]="[1]"
+                   [hidePageSize]="true">
+    </mat-paginator>
+  </div>
+</div>

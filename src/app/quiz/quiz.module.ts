@@ -7,20 +7,27 @@ import {MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldModule} from '@angular/mater
 import {MAT_SELECT_CONFIG, MatSelect, MatSelectModule} from "@angular/material/select";
 import {MatButtonModule} from "@angular/material/button";
 import {QuizService} from "./services/quiz.service";
+import { ScoreBoardTableComponent } from './components/score-board-table/score-board-table.component';
+import {MatTableModule} from "@angular/material/table";
+import {MatSortModule} from "@angular/material/sort";
+import {MatPaginatorModule} from "@angular/material/paginator";
 
 @NgModule({
   declarations: [
-    QuizComponent
+    QuizComponent,
+    ScoreBoardTableComponent
   ],
   imports: [
     CommonModule,
     QuizRoutingModule,
     MatFormFieldModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
   ],
   providers: [
-    QuizService,
     MatSelect,
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -29,7 +36,6 @@ import {QuizService} from "./services/quiz.service";
     {
       provide: MAT_SELECT_CONFIG,
       useValue: {
-        overlayPanelClass: 'customPanelClass',
         hideSingleSelectionIndicator: true,
       }
     }

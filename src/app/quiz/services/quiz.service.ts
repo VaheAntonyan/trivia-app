@@ -1,28 +1,23 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {BehaviorSubject, map} from "rxjs";
-import {BackendQuestion, FrontendQuestion} from "../models/question.model";
+import {QuestionDto} from "../shared/types/dtos/question.dto";
+import {Question} from "../shared/types/interfaces/question.interface";
+import {QuizState} from "../shared/types/interfaces/quiz-state.interface";
+import {ScoreRecord} from "../shared/types/interfaces/score-record.interface";
+import {ScreenName} from "../shared/types/types/screen-name.type";
+import {Category} from "../shared/types/interfaces/category.interface";
 
-export type ScreenName = 'home' | 'quiz' | 'thank-you' | 'score-board'
-interface QuizState {
-  questions: FrontendQuestion[]
-  currentQuestionIndex: number,
-  correctAnswerCount: number,
-  answers: string[],
-  screenName: ScreenName,
-}
-
-export interface ScoreRecord {
-  score: number;
-  answers: string[];
-}
-
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class QuizService {
-  private apiUrl = 'https://opentdb.com/api.php?amount=10&encode=url3986&category='
+  private apiCategoryByIdUrl: string = 'https://opentdb.com/api.php?amount=10&encode=url3986&category='
+  private apiCategoriesUrl: string = 'https://opentdb.com/api_category.php'
 
   private initialState: QuizState = {
     questions: [],
+    categories: [],
     currentQuestionIndex: 0,
     correctAnswerCount: 0,
     answers: [],
@@ -34,34 +29,38 @@ export class QuizService {
 
   state$: BehaviorSubject<QuizState> = new BehaviorSubject<QuizState>(this.initialState)
 
-  setState(partialState: Partial<QuizState>): void {
-    this.state$.next({
-      ...this.state$.getValue(),
-      ...partialState
-    })
-  }
-
   getState(): QuizState {
     return this.state$.getValue()
+  }
+
+  setState(partialState: Partial<QuizState>): void {
+    this.state$.next({
+      ...this.getState(),
+      ...partialState
+    })
   }
 
   nextQuestion(): void {
     const state = this.getState();
     if (state.currentQuestionIndex === state.questions.length - 1) {
+      this.updateQuizBoard();
       this.showScreen('thank-you');
-      const state = this.state$.getValue();
-      const quizScoreBoard: ScoreRecord[] = JSON.parse(localStorage.getItem('quizScoreBoard') || '[]');
-
-      quizScoreBoard.push({
-        score: state.correctAnswerCount,
-        answers: state.answers
-      })
-      localStorage.setItem('quizScoreBoard', JSON.stringify(quizScoreBoard));
     } else {
       this.setState({
-        currentQuestionIndex: this.getState().currentQuestionIndex + 1
+        currentQuestionIndex: state.currentQuestionIndex + 1
       })
     }
+  }
+
+  private updateQuizBoard() {
+    const state = this.getState();
+    const quizScoreBoard: ScoreRecord[] = JSON.parse(localStorage.getItem('quizScoreBoard') || '[]');
+
+    quizScoreBoard.push({
+      score: state.correctAnswerCount,
+      answers: state.answers
+    })
+    localStorage.setItem('quizScoreBoard', JSON.stringify(quizScoreBoard));
   }
 
   showScreen(name: ScreenName) {
@@ -70,8 +69,22 @@ export class QuizService {
     })
   }
 
+  loadCategories(): void {
+    this.httpClient.get<{ trivia_categories: Category[] }>(this.apiCategoriesUrl)
+      .pipe(
+        map(response => {
+          return response.trivia_categories.sort((a, b) => a.name.localeCompare(b.name))
+        })
+      )
+      .subscribe(categories => {
+        this.setState({
+          categories: categories
+        })
+      })
+  }
+
   loadQuestions(categoryId: number): void {
-    this.httpClient.get<{ results: BackendQuestion[] }>(this.apiUrl + categoryId)
+    this.httpClient.get<{ results: QuestionDto[] }>(this.apiCategoryByIdUrl + categoryId)
       .pipe(
         map(response => response.results),
         map(questions => {
@@ -79,7 +92,7 @@ export class QuizService {
             const decodedQuestion = decodeURIComponent(question.question);
             const decodedCorrectAnswer = decodeURIComponent(question.correct_answer);
             const decodedIncorrectAnswers = question.incorrect_answers.map(e => decodeURIComponent(e));
-            const frontEndQuestion: FrontendQuestion = {
+            const frontEndQuestion: Question = {
               category: question.category,
               type: question.type,
               difficulty: question.difficulty.charAt(0).toUpperCase() + question.difficulty.slice(1) as Capitalize<typeof question.difficulty>,

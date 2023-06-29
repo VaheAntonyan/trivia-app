@@ -1,4 +1,4 @@
-div {
+body {
   box-sizing: border-box;
 }
 
@@ -32,6 +32,8 @@ body {
   border-radius: 18px !important;
   padding: 10px !important;
   margin: 6px 0;
+  background-color: #F6F7F8 !important;
+  box-shadow: 0px 4px 10px 0px rgba(0, 0, 0, 0.04) !important;
 }
 
 .mdc-list-item__primary-text {
@@ -41,4 +43,58 @@ body {
 .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
   padding-top: 12.5px;
   padding-bottom: 12.5px;
+}
+
+.mat-mdc-form-field-infix {
+  width: 283.4px !important;
+}
+
+.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__trailing {
+    border-radius: 0 18px 18px 0 !important;
+    border: 2px solid #E7EBF1;
+    border-left: none;
+    background-color: #F6F7F8;
+}
+
+.mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
+    border-radius: 18px 0 0 18px !important;
+    width: 18px !important;
+    border: 2px solid #E7EBF1;
+    border-right: none;
+    background-color: #F6F7F8;
+}
+
+.mdc-text-field--outlined .mdc-notched-outline {
+  z-index: unset !important;
+}
+
+.mdc-text-field--outlined {
+  padding-right: 20.6px !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled):not(.mdc-text-field--focused):hover .mdc-notched-outline .mdc-notched-outline__trailing {
+  border-color: #E1E5EC;
+  transition: all 0.3s ease-in-out;
+}
+
+.mat-mdc-select-placeholder {
+  color: #9EA0A4 !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: #95B6A9;
+}
+
+.mat-mdc-form-field:not(.mat-focused) .mat-mdc-select-arrow svg path {
+  d: path("M6.7925 7.86499L11 12.0725L15.2075 7.86499L16.5 9.16666L11 14.6667L5.5 9.16666L6.7925 7.86499Z");
+  fill: #9EA0A4;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-select-arrow svg path {
+  d: path("M6.7925 14.1258L11 9.92742L15.2075 14.1258L16.5 12.8333L11 7.33325L5.5 12.8333L6.7925 14.1258Z");
+  fill: #354153;
 }

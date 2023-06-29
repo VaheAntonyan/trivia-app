@@ -1,5 +1,5 @@
 <div>
-  <div *ngIf="(screenName$ | async) === 'home'">
+  <div *ngIf="(screenName$ | async) === 'home'" @enterAnimation @leaveAnimation>
     <div [ngClass]="'quiz-container'">
       <div [ngClass]="'home-title'">
         Trivia App
@@ -8,14 +8,14 @@
         Pick a Category
       </div>
       <div [ngClass]="'quiz-category-dropdown-wrapper'">
-        <mat-form-field appearance="outline">
-          <mat-select placeholder="Category"
-                      [(value)]="selectedCategoryValue">
-            <mat-option *ngFor="let category of categories" [value]="category.value" >
-              {{category.name}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-select placeholder="Category"
+                        [(value)]="selectedCategoryValue">
+              <mat-option *ngFor="let category of (categories$ | async)" [value]="category.id">
+                {{category.name}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
       </div>
       <button [ngClass]="selectedCategoryValue
       ? 'button margin-top-99 quiz-start animate-300-ease-in-out'
@@ -23,11 +23,12 @@
               (click)="start()">
         <span>Start</span>
       </button>
-      <button [ngClass]="'button-score-board transition-300-ease-in-out'" (click)="showScoreBoard()">Score Board
+      <button [ngClass]="'button-score-board transition-300-ease-in-out'" (click)="showScoreBoard()">
+        <span>Score Board</span>
       </button>
     </div>
   </div>
-  <div *ngIf="(screenName$ | async) === 'quiz'">
+  <div *ngIf="(screenName$ | async) === 'quiz'" @enterAnimation @leaveAnimation>
     <div *ngIf="(currentQuestion$ | async); let currentQuestion" [ngClass]="'question-container'">
       <div [ngClass]="'question-number'">
         Questions {{ currentQuestionIndex$ | async | number : '2.0-0'}}
@@ -43,17 +44,19 @@
         </div>
         <div [ngClass]="'answers'">
           <div *ngFor="let answer of currentQuestion.allAnswers">
-            <button (click)="handleAnswer(answer)" [ngClass]="'answer-button transition-300-ease-in-out'">
-              <span>
-                {{answer}}
-              </span>
-            </button>
+            <div [ngClass]="'answer-grid-item'">
+              <button (click)="handleAnswer(answer)" [ngClass]="'answer-button transition-300-ease-in-out'">
+                <span>
+                  {{answer}}
+                </span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div *ngIf="(screenName$ | async) === 'thank-you'" [ngClass]="'thank-you-container'">
+  <div *ngIf="(screenName$ | async) === 'thank-you'" [ngClass]="'thank-you-container'" @enterAnimation @leaveAnimation>
     <div [ngClass]="'thank-you'">
       Thank You
     </div>
@@ -64,18 +67,13 @@
       <span>Back to home</span>
     </button>
   </div>
-  <div *ngIf="(screenName$ | async) === 'score-board'">
-    <div *ngFor="let quizScoreRecord of quizScoreRecords">
-      <div>
-        {{quizScoreRecord.score}}
-      </div>
-      <div>
-        {{quizScoreRecord.answers.toString()}}
-      </div>
+  <div *ngIf="(screenName$ | async) === 'score-board'" @enterAnimation>
+    <app-score-board-table></app-score-board-table>
+    <div [ngClass]="'quiz-container'">
+      <button (click)="restart()" [ngClass]="'button transition-300-ease-in-out'">
+        <span>Back to home</span>
+      </button>
     </div>
-    <button (click)="restart()" [ngClass]="'button button-restart transition-300-ease-in-out'">
-      <span>Back to home</span>
-    </button>
   </div>
 
 </div>
